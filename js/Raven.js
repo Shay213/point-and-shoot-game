@@ -19,6 +19,9 @@ export default class Raven {
     this.maxFrame = 4
     this.timeSinceFlap = 0
     this.flapInterval = 100
+
+    this.randomColors = [getRGBValue(), getRGBValue(), getRGBValue()]
+    this.color = `rgb(${this.randomColors[0]}, ${this.randomColors[1]}, ${this.randomColors[2]})`
   }
 
   update(deltaTime){
@@ -36,12 +39,17 @@ export default class Raven {
     }
   }
 
-  draw(ctx){
-    ctx.strokeRect(this.x, this.y, this.width, this.height)
+  draw(ctx, collisionCtx){
+    collisionCtx.fillStyle = this.color
+    collisionCtx.fillRect(this.x, this.y, this.width, this.height)
     ctx.drawImage(this.img, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
   }
 
   isOffScreen(){
     return this.x < 0 - this.width
   }
+}
+
+function getRGBValue(){
+  return Math.floor(Math.random() * 255)
 }
