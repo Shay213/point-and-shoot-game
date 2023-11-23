@@ -27,6 +27,7 @@ function animate(timestamp){
     raven.update()
     raven.draw(ctx)
   })
+  ravens = ravens.filter(raven => !raven.isOffScreen())
 
   requestAnimationFrame(animate)
 }

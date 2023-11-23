@@ -15,4 +15,8 @@ export default class Raven {
   draw(ctx){
     ctx.fillRect(this.x, this.y, this.width, this.height)
   }
+
+  isOffScreen(){
+    return this.x < 0 - this.width
+  }
 }
