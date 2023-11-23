@@ -1,27 +1,10 @@
+import Raven from "./Raven.js"
+
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
-
-class Raven {
-  constructor() {
-    this.width = 100
-    this.height = 50
-    this.x = canvas.width
-    this.y = Math.random() * (canvas.height - this.height)
-    this.directionX = Math.random() * 5 + 3
-    this.directionY = Math.random() * 5 - 2.5
-  }
-
-  update(){
-    this.x -= this.directionX
-  }
-
-  draw(){
-    ctx.fillRect(this.x, this.y, this.width, this.height)
-  }
-}
 
 let ravens = []
 let timeToNextRaven = 0
@@ -36,13 +19,13 @@ function animate(timestamp){
   timeToNextRaven += deltaTime
 
   if(timeToNextRaven > ravenInterval){
-    ravens.push(new Raven())
+    ravens.push(new Raven(canvas))
     timeToNextRaven = 0
   }
 
   ravens.forEach(raven => {
     raven.update()
-    raven.draw()
+    raven.draw(ctx)
   })
 
   requestAnimationFrame(animate)
