@@ -1,5 +1,7 @@
 export default class Raven {
   constructor(canvas) {
+    this.canvas = canvas
+
     this.img = new Image()
     this.img.src = './assets/raven.png'
     this.spriteWidth = 271
@@ -20,7 +22,12 @@ export default class Raven {
   }
 
   update(deltaTime){
+    if(this.y < 0 || this.y > canvas.height - this.height){
+      this.directionY *= -1
+    }
+
     this.x -= this.directionX
+    this.y += this.directionY
 
     this.timeSinceFlap += deltaTime
     if(this.timeSinceFlap > this.flapInterval){
