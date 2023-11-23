@@ -20,8 +20,10 @@ export default class Raven {
     this.timeSinceFlap = 0
     this.flapInterval = 100
 
-    this.randomColors = [getRGBValue(), getRGBValue(), getRGBValue()]
+    this.randomColors = [getRGBValue(), getRGBValue(), getRGBValue(), 255]
     this.color = `rgb(${this.randomColors[0]}, ${this.randomColors[1]}, ${this.randomColors[2]})`
+
+    this.markedForDeletion = false
   }
 
   update(deltaTime){
@@ -37,6 +39,10 @@ export default class Raven {
       this.frame = this.frame > this.maxFrame ? 0 : this.frame + 1
       this.timeSinceFlap = 0
     }
+
+    if(this.x < 0 - this.width){
+      this.markedForDeletion = true
+    }
   }
 
   draw(ctx, collisionCtx){
@@ -45,11 +51,19 @@ export default class Raven {
     ctx.drawImage(this.img, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
   }
 
-  isOffScreen(){
-    return this.x < 0 - this.width
+  hit(colorArr){
+    if(isSameArr(this.randomColors, colorArr)){
+      this.markedForDeletion = true
+      return true
+    }
+    return false
   }
 }
 
 function getRGBValue(){
   return Math.floor(Math.random() * 255)
+}
+
+function isSameArr(arr1, arr2){
+  return JSON.stringify(arr1) === JSON.stringify(arr2)
 }

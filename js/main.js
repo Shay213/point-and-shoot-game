@@ -23,7 +23,11 @@ let lastTime = 0
 
 window.addEventListener('click', (e) => {
   const detectPixelColor = collisionCtx.getImageData(e.x, e.y, 1, 1)
-  console.log(detectPixelColor)
+
+  ravens.forEach(raven => {
+    const isHit = raven.hit([...detectPixelColor.data])
+    isHit && score++
+  })
 })
 
 function animate(timestamp){
@@ -44,7 +48,7 @@ function animate(timestamp){
     raven.update(deltaTime)
     raven.draw(ctx, collisionCtx)
   })
-  ravens = ravens.filter(raven => !raven.isOffScreen())
+  ravens = ravens.filter(raven => !raven.markedForDeletion)
   requestAnimationFrame(animate)
 }
 
