@@ -58,6 +58,10 @@ export default class Raven {
     }
     return false
   }
+
+  isOffScreen(){
+    return this.x < 0 - this.width
+  }
 }
 
 function getRGBValue(){

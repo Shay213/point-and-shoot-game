@@ -22,6 +22,7 @@ let explosions = []
 let timeToNextRaven = 0
 let ravenInterval = 500
 let lastTime = 0
+let gameOver = false
 
 window.addEventListener('click', (e) => {
   const detectPixelColor = collisionCtx.getImageData(e.x, e.y, 1, 1)
@@ -52,11 +53,23 @@ function animate(timestamp){
   [...ravens, ...explosions].forEach(obj => {
     obj.update(deltaTime)
     obj.draw(ctx, collisionCtx)
+    // check if raven is off screen
+    if(obj?.isOffScreen()){
+      gameOver = true
+    }
   });
   ravens = ravens.filter(raven => !raven.markedForDeletion)
   explosions = explosions.filter(explosion => !explosion.markedForDeletion)
 
-  requestAnimationFrame(animate)
+  gameOver ? drawGameOver() : requestAnimationFrame(animate)
+}
+
+function drawGameOver(){
+  ctx.textAlign = 'center'
+  ctx.fillStyle = 'black'
+  ctx.fillText(`GAME OVER, your score is: ${score}`, canvas.width * 0.5, canvas.height * 0.5)
+  ctx.fillStyle = 'white'
+  ctx.fillText(`GAME OVER, your score is: ${score}`, canvas.width * 0.5 + 3, canvas.height * 0.5 + 3)
 }
 
 animate(0)
