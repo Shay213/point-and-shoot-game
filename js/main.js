@@ -24,11 +24,10 @@ function animate(timestamp){
   }
 
   ravens.forEach(raven => {
-    raven.update()
+    raven.update(deltaTime)
     raven.draw(ctx)
   })
   ravens = ravens.filter(raven => !raven.isOffScreen())
-
   requestAnimationFrame(animate)
 }
 
