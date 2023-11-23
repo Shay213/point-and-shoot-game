@@ -1,10 +1,8 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let ravens = []
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
 
 class Raven {
   constructor() {
@@ -25,15 +23,29 @@ class Raven {
   }
 }
 
-const raven = new Raven()
+let ravens = []
+let timeToNextRaven = 0
+let ravenInterval = 500
+let lastTime = 0
 
 function animate(timestamp){
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   
-  raven.update()
-  raven.draw()
+  let deltaTime = timestamp - lastTime
+  lastTime = timestamp
+  timeToNextRaven += deltaTime
+
+  if(timeToNextRaven > ravenInterval){
+    ravens.push(new Raven())
+    timeToNextRaven = 0
+  }
+
+  ravens.forEach(raven => {
+    raven.update()
+    raven.draw()
+  })
 
   requestAnimationFrame(animate)
 }
 
-animate()
+animate(0)
