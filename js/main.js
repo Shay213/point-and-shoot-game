@@ -1,5 +1,6 @@
 import Raven from "./Raven.js"
 import drawScore from "./drawScore.js"
+import Explosion from "./Explosion.js"
 
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
@@ -17,6 +18,7 @@ collisionCanvas.height = window.innerHeight
 
 let score = 0
 let ravens = []
+let explosions = []
 let timeToNextRaven = 0
 let ravenInterval = 500
 let lastTime = 0
@@ -26,7 +28,10 @@ window.addEventListener('click', (e) => {
 
   ravens.forEach(raven => {
     const isHit = raven.hit([...detectPixelColor.data])
-    isHit && score++
+    if(isHit){
+      explosions.push(new Explosion(raven.x, raven.y, raven.width))
+      score++
+    }
   })
 })
 
@@ -43,12 +48,14 @@ function animate(timestamp){
     timeToNextRaven = 0
   }
 
-  drawScore(ctx, score)
-  ravens.forEach(raven => {
-    raven.update(deltaTime)
-    raven.draw(ctx, collisionCtx)
-  })
+  drawScore(ctx, score);
+  [...ravens, ...explosions].forEach(obj => {
+    obj.update(deltaTime)
+    obj.draw(ctx, collisionCtx)
+  });
   ravens = ravens.filter(raven => !raven.markedForDeletion)
+  explosions = explosions.filter(explosion => !explosion.markedForDeletion)
+
   requestAnimationFrame(animate)
 }
 
